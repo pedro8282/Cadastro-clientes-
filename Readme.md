@@ -13,4 +13,8 @@
 - Email; 
 - Código;
 ----------------------------
+### Criando Execultavel 
+
+- OBS : pip install pyinstaller
+- pyinstaller --onefile --console --windowed (nome do programa.py)
 
