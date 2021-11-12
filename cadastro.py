@@ -1,7 +1,9 @@
 
 from tkinter import *
 from tkinter import ttk
+from tkinter import tix 
 import sqlite3
+from tkinter import font
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
@@ -10,7 +12,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Image
 import webbrowser
 
-root = Tk()
+root = tix.Tk()
 
 class Relatorios():
     def printCliente(self):
@@ -165,50 +167,77 @@ class Application(Funcs, Relatorios):
         self.root.maxsize(width=1024, height=768)
         self.root.minsize(width=640, height=480)
     def freme_da_tela(self):
+       
+        ## Frames 1 e 2 
         self.frame_1 = Frame(self.root, bd = 4, bg= '#dfe3ee', highlightbackground= '#759fe6', highlightthickness=2)
         self.frame_1.place(relx= 0.02, rely= 0.02, relwidth= 0.96 , relheight= 0.46)
 
         self.frame_2 = Frame(self.root, bd=4, bg='#dfe3ee' , highlightbackground='#759fe6', highlightthickness=2)
         self.frame_2.place(relx=0.02, rely=0.5, relwidth=0.96, relheight=0.46)
     def criando_botoes(self):
+
+        ### Abas do frame 1
+        self.abas = ttk.Notebook(self.frame_1)
+        self.aba1 = Frame(self.abas)
+        self.aba2 = Frame(self.abas)
+ 
+        self.aba1.configure(background = "#dfe3ee",  )
+        self.aba2.configure(background = "lightgray",  )
+
+        self.abas.add(self.aba1, text = 'DADOS DO CLIENTE  ' )
+        self.abas.add(self.aba2, text = "ABA 2 ")
+    
+
+        self.abas.place(relx= 0, rely= 0, relwidth= 1 , relheight= 1)
+
         ### Criação do botão limmpar.
-        self.bt_limpar = Button (self.frame_1, text='Limpar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command= self.limpaTela)
+        self.bt_limpar = Button (self.aba1, text='Limpar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command= self.limpaTela)
         self.bt_limpar.place(relx=0.25, rely=0.08, relwidth=0.1, relheight=0.14)
         ### Criação do botão buscar.
-        self.bt_buscar = Button(self.frame_1, text='Buscar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.busca_Cliente )
+        self.bt_buscar = Button(self.aba1, text='Buscar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.busca_Cliente )
         self.bt_buscar.place(relx=0.15, rely=0.08, relwidth=0.1, relheight=0.14)
+
+        texto_balão_buscar = ("Digite no campo o nome do cliente que deseja pesquisar!")
+        self.balão_buscar =  tix.Balloon(self.aba1)
+        self.balão_buscar.bind_widget(self.bt_buscar, balloonmsg = texto_balão_buscar)
+
         ### Criação do botão novo.
-        self.bt_novo = Button(self.frame_1, text='Novo', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.add_cliente)
+        self.bt_novo = Button(self.aba1, text='Novo', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.add_cliente)
         self.bt_novo.place(relx=0.6, rely=0.08, relwidth=0.1, relheight=0.14)
         ### Criação do botão alterar.
-        self.bt_alterar = Button(self.frame_1, text='Alterar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.alterar_cliente )
+        self.bt_alterar = Button(self.aba1, text='Alterar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.alterar_cliente )
         self.bt_alterar.place(relx=0.7, rely=0.08, relwidth=0.1, relheight=0.14)
+
+        texto_balão_alterar = ("Para alterar os dados, selecione os dados do cliente desejado clicando duas vezes.")
+        self.balão_alterar =  tix.Balloon(self.aba1)
+        self.balão_alterar.bind_widget(self.bt_alterar, balloonmsg = texto_balão_alterar)
+
         ### Criação do botão apagar.
-        self.bt_apagar = Button(self.frame_1, text='Apagar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.deleta_cliente )
+        self.bt_apagar = Button(self.aba1, text='Apagar', bd=3, bg='#4F4F4F', fg='white', font= ("verdana" ,8,"bold"), command=self.deleta_cliente )
         self.bt_apagar.place(relx=0.8, rely=0.08, relwidth=0.1, relheight=0.14,)
     def criando_label_entrada_codigo(self):
         ###criação da laebl e da entrada  do código.
-        self.lb_codigo = Label(self.frame_1, text = 'Código', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
+        self.lb_codigo = Label(self.aba1, text = 'Código', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
         self.lb_codigo.place(relx=0.04, rely=0.08, )
-        self.codigo_entrey = Entry(self.frame_1, bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold") )
+        self.codigo_entrey = Entry(self.aba1, bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold") )
         self.codigo_entrey.place(relx=0.04, rely=0.19,relwidth=0.06, relheight=0.08, )
 
         ###criação da laebl e da entrada  do nome.
-        self.lb_nome = Label(self.frame_1, text='Nome', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
+        self.lb_nome = Label(self.aba1, text='Nome', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
         self.lb_nome.place(relx=0.04, rely=0.40)
-        self.nome_entrey = Entry(self.frame_1,  bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold"))
+        self.nome_entrey = Entry(self.aba1,  bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold"))
         self.nome_entrey.place(relx=0.04, rely=0.50, relwidth=0.85, relheight=0.08)
 
         ###criação da laebl e da entrada  do tolefone.
-        self.lb_telefone = Label(self.frame_1, text='Telefone', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
+        self.lb_telefone = Label(self.aba1, text='Telefone', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
         self.lb_telefone.place(relx=0.04, rely=0.65)
-        self.telefone_entrey = Entry(self.frame_1,  bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold"))
+        self.telefone_entrey = Entry(self.aba1,  bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold"))
         self.telefone_entrey.place(relx=0.04, rely=0.75, relwidth=0.33, relheight=0.08, )
 
         ###criação da laebl e da entrada  do cidade.
-        self.lb_cidade = Label(self.frame_1, text='Cidade', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
+        self.lb_cidade = Label(self.aba1, text='Cidade', bd=0, bg='#dfe3ee', fg='black', font= ("verdana" ,10,"bold"))
         self.lb_cidade.place(relx=0.45, rely=0.65)
-        self.cidade_entrey = Entry(self.frame_1, bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold") )
+        self.cidade_entrey = Entry(self.aba1, bg='#c0c0c0', fg='black', font=("verdana" ,8,"bold") )
         self.cidade_entrey.place(relx=0.45, rely=0.75, relwidth=0.44, relheight=0.08, )
     def lista_frame2(self):
         self.listaCli = ttk.Treeview(self.frame_2, height=3, columns=("col1", 'col2', 'col3', 'col4'))
@@ -238,14 +267,15 @@ class Application(Funcs, Relatorios):
 
         def Quit(): self.root.destroy()
 
-        menubar.add_cascade(label= "Opções", menu= filemenu)
+        menubar.add_cascade( label= "Opções", menu= filemenu )
         menubar.add_cascade(label= "Relatórios", menu= filemenu2)
 
-        filemenu.add_command(label="Sair", command= Quit)
+        filemenu.add_command(label="Sair")
         filemenu.add_command(label= "Limpa Tela", command= self.limpaTela)
 
         filemenu2.add_command(label= "Ficha do cliente", command= self.geraRelatorioCliente)
 
+        
 
 
 

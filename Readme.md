@@ -16,5 +16,5 @@
 ### Criando Execultavel 
 
 - OBS : pip install pyinstaller
-- pyinstaller --onefile --console --windowed (nome do programa.py)
+- pyinstaller --onefile --console --windowed nome_do_programa.py
 
